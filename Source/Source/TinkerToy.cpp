@@ -87,11 +87,11 @@ static void init_system(void)
 	// Create three particles, attach them to each other, then add a
 	// circular wire constraint to the first.
 
-	pVector.push_back(new Particle(center + offset));
+	/*pVector.push_back(new Particle(center + offset));
 	pVector.push_back(new Particle(center + offset + offset + Vec2f(0.1, 0.0)));
 	pVector.push_back(new Particle(center + offset + offset + offset));
 
-	pVector.push_back(new Particle(center - 3 * offset ));
+	pVector.push_back(new Particle(center - 3 * offset ));*/
 
 	// You shoud replace these with a vector generalized forces and one of
 	// constraints...
@@ -103,13 +103,18 @@ static void init_system(void)
 	}
 
 
-	forces.push_back( new SpringForce(pVector[0], pVector[1], dist, 0.3, 0.3));
+	//forces.push_back( new SpringForce(pVector[0], pVector[1], dist, 0.3, 0.3));
 
 	// Apply gravity on all particle
-	forces.push_back( new Gravity(pVector[2]));
+	//forces.push_back( new Gravity(pVector[2]));
+
+	for_each(pVector.begin(), pVector.end(), [](Particle* f)
+	{
+		//forces.push_back(new Gravity(f));
+	});
 
 	//delete_this_dummy_spring = new SpringForce(pVector[0], pVector[1], dist, 1.0, 1.0);
-	constraints.push_back(new RodConstraint(pVector[1], pVector[2], dist));
+	//constraints.push_back(new RodConstraint(pVector[1], pVector[2], dist));
 
 	//constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
 }
@@ -181,7 +186,7 @@ static void draw_forces(void)
 	for_each(mouses.begin(), mouses.end(), [](MouseForce* m)
 	{
 		//cout << mouses.size() << "\n";
-		m->draw();
+		//m->draw();
 	});
 
 }
@@ -450,7 +455,7 @@ Creates a 5x5 grid of cloth
 
 void createCloth() {
 
-	Vec2f clothStart = (0.0, 0.0);
+	Vec2f clothStart = (0.1, 0.1);
 
 	//loop through the width of the cloth
 	for (int width = 0; width < 5; width++) {
@@ -459,23 +464,57 @@ void createCloth() {
 			float fWidth = width;
 			float fHeight = -height;
 			pVector.push_back(new Particle(clothStart + Vec2f(fWidth / 5, fHeight / 5)));
+			cout << "pvector = " << Vec2f(fWidth / 5, fHeight / 5) << " particle created" << "\n";
+			//mouses.push_back(new MouseForce(pVector[vectorid], pVector[vectorid]->m_Velocity, 0.5, 0.5));
 		}
 	}
 
-	int ks = 5;
-	int kd = 3;
+	int ks = 4;
+	int kd = 2;
+
+
+	//mouses.push_back(new MouseForce(pVector[vectorid], pVector[vectorid]->m_Velocity, 0.5, 0.5));
+
+	//forces.push_back(new SpringForce(pVector[0], pVector[1], 0.2, ks, kd));
+	//forces.push_back(new SpringForce(pVector[1], pVector[2], 0.2, ks, kd));
+
 
 	for (int width = 0; width < 5; width++) {
 		//loop through the height of the cloth
 		for (int height = 0; height < 5; height++) {
 			int vectorid = width * 5 + height;
-			cout << "id = " << vectorid << " size =" << pVector.size() << "\n";
+			//cout << "id = " << vectorid << " size =" << pVector.size() << "\n";
 
-			mouses.push_back(new MouseForce(pVector[vectorid], pVector[vectorid]->m_Velocity, 0.5, 0.5));
+			
+			if (vectorid < 24) {
+				if (height < 4) {
+					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 1], 0.2, ks, kd));
+				}
+				if (width < 4) {
+					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 5], 0.2, ks, kd));
+				}
+				float length = sqrt(0.2*0.2 * 2);
+				if (height < 4 && width < 4) {
+					//float length = sqrt(0.2*0.2*2);
+					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 6], length, ks, kd));
+				}
+				if (height > 0 && width < 4) {
+					//if (vectorid + 4 < pVector.size() && vectorid + 4 > 0) {
+						forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 4], length, ks, kd));
+					//}
 
-			forces.push_back(new SpringForce(pVector[0], pVector[1], 0.2, ks, kd));
-			forces.push_back(new SpringForce(pVector[1], pVector[2], 0.2, ks, kd));
-			//forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 1], 0.2, ks, kd));
+				}
+				if (vectorid - 4 < pVector.size() && vectorid - 4 > 0) {
+					//forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid - 4], length, ks, kd));
+				}
+
+				if (height < 3) {
+					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 2], 0.4, ks, kd));
+				}
+				if (width < 3) {
+					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 10], 0.4, ks, kd));
+				}
+			}
 		}
 	}
 }
@@ -524,7 +563,7 @@ int main ( int argc, char ** argv )
 	dump_frames = 0;
 	frame_number = 0;
 
-	//init_system();
+	init_system();
 
 	win_x = 512;
 	win_y = 512;
