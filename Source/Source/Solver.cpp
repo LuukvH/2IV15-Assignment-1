@@ -14,4 +14,3 @@ void simulation_step( std::vector<Particle*> pVector,  std::vector<IForce*> forc
 {
 	scheme ->  DerivEval(pVector,  forces, constraints, dt);
 }
-

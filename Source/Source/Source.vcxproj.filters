@@ -27,9 +27,6 @@
     <ClCompile Include="TinkerToy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CircularWireConstraint.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Particle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,15 +54,15 @@
     <ClCompile Include="Matrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MouseForce.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RodConstraint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SpringForce.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CircularWireConstraint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="linearSolver.h">
@@ -102,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseForce.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

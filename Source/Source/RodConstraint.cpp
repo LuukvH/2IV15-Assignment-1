@@ -1,8 +1,7 @@
 #include "RodConstraint.h"
-#include <glut.h>
 
 RodConstraint::RodConstraint(Particle *p1, Particle * p2, double dist) :
-  m_p1(p1), m_p2(p2), m_dist(dist) 
+	m_p1(p1), m_p2(p2), m_dist(dist)
 {
 	particles.push_back(m_p1);
 	particles.push_back(m_p2);
@@ -33,11 +32,10 @@ std::vector<Vec2f> RodConstraint::getJdot() {
 
 void RodConstraint::draw()
 {
-  glBegin( GL_LINES );
-  glColor3f(0.8, 0.7, 0.6);
-  glVertex2f( m_p1->m_Position[0], m_p1->m_Position[1] );
-  glColor3f(0.8, 0.7, 0.6);
-  glVertex2f( m_p2->m_Position[0], m_p2->m_Position[1] );
-  glEnd();
-
+	glBegin( GL_LINES );
+	glColor3f(0.8, 0.7, 0.6);
+	glVertex2f( m_p1->m_Position[0], m_p1->m_Position[1] );
+	glColor3f(0.8, 0.7, 0.6);
+	glVertex2f( m_p2->m_Position[0], m_p2->m_Position[1] );
+	glEnd();
 }

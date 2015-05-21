@@ -2,9 +2,10 @@
 
 #include "Particle.h"
 #include "IConstraint.h"
-#include "linearSolver.h"
 
-class RodConstraint: public IConstraint {
+class RodConstraint: public IConstraint 
+{
+
 public:
 	RodConstraint(Particle *p1, Particle * p2, double dist);
 
@@ -16,8 +17,8 @@ public:
 	virtual void draw();
 
 private:
+	Particle* m_p1;
+	Particle* m_p2;
+	float m_dist;
 
-	Particle * const m_p1;
-	Particle * const m_p2;
-	double const m_dist;
 };
