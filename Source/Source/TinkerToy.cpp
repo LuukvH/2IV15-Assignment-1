@@ -10,6 +10,8 @@
 #include "IConstraint.h"
 #include "MouseForce.h"
 #include "CircularWireConstraint.h"
+#include "HorizontalWireConstraint.h"
+#include "DragForce.h"
 
 #include <iostream>
 #include <fstream>
@@ -49,9 +51,12 @@ static int hmx, hmy;
 Vec2f MousePos;
 int particleSelected = -1;
 
-static std::vector<MouseForce*> mouses;
+static MouseForce *mouseForce;
 static std::vector<IForce*> forces;
 static std::vector<IConstraint*> constraints;
+
+// Prototypes
+void createCloth();
 
 /*
 ----------------------------------------------------------------------
@@ -80,38 +85,35 @@ static void init_system(void)
 	const double dist = 0.2;
 	const Vec2f center(0.0, 0.0);
 	const Vec2f offset(dist, 0.0);
-
-
-	//creating a random particle for the lulz
-	const Vec2f random(dist * 2, 0.0);
-
+	
 	// Create three particles, attach them to each other, then add a
 	// circular wire constraint to the first.
 
-	//pVector.push_back(new Particle(center + offset));
+	/*pVector.push_back(new Particle(center + offset));
 	pVector.push_back(new Particle(center + offset + offset + Vec2f(0.1, 0.0)));
 	pVector.push_back(new Particle(Vec2f(0.5, 0)));
+	pVector.push_back(new Particle(Vec2f(0, 1)));*/
 
 	// You shoud replace these with a vector generalized forces and one of
 	// constraints...
 
-	int i, size = pVector.size();
-	for (i = 0; i<size; i++)
-	{
-		//mouses.push_back(new MouseForce(pVector[i], pVector[i]->m_Velocity, 0.5, 0.5));
-	}
+	createCloth();
 
-
-	//forces.push_back( new SpringForce(pVector[0], pVector[1], dist, 0.3, 0.3));
+	mouseForce = new MouseForce();
+	forces.push_back(mouseForce);
 
 	// Apply gravity on all particle
-	forces.push_back( new Gravity(pVector[0]));
-	forces.push_back( new Gravity(pVector[1]));
+	///*forces.push_back( new Gravity(pVector[0]));
+	//forces.push_back( new Gravity(pVector[1]));
+	//forces.push_back( new Gravity(pVector[2]));
 
-	//delete_this_dummy_spring = new SpringForce(pVector[0], pVector[1], dist, 1.0, 1.0);
-	//constraints.push_back(new RodConstraint(pVector[1], pVector[2], dist));
-	constraints.push_back(new CircularWireConstraint (pVector[0], Vec2f(0,0), 0.5));
-	constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
+	//forces.push_back( new DragForce(pVector[0], 0.99));
+	//forces.push_back( new DragForce(pVector[1], 0.99));
+	//forces.push_back( new DragForce(pVector[2], 0.99));
+
+	//constraints.push_back(new CircularWireConstraint (pVector[0], Vec2f(0,0), 0.5));
+	//constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
+	//constraints.push_back(new HorizontalWireConstraint (pVector[2], 1));*/
 }
 
 /*
@@ -132,25 +134,7 @@ static void pre_display ( void )
 
 static void post_display ( void )
 {
-	// Write frames if necessary.
-	if (dump_frames) {
-		const int FRAME_INTERVAL = 4;
-		if ((frame_number % FRAME_INTERVAL) == 0) {
-			const unsigned int w = glutGet(GLUT_WINDOW_WIDTH);
-			const unsigned int h = glutGet(GLUT_WINDOW_HEIGHT);
-			unsigned char * buffer = (unsigned char *) malloc(w * h * 4 * sizeof(unsigned char));
-			if (!buffer)
-				exit(-1);
-			// glRasterPos2i(0, 0);
-			glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-			static char filename[80];
-			sprintf_s(filename, "snapshots/img%.5i.png", frame_number / FRAME_INTERVAL);
-			printf("Dumped %s.\n", filename);
-			saveImageRGBA(filename, buffer, w, h);
-
-			free(buffer);
-		}
-	}
+	
 	frame_number++;
 
 	glutSwapBuffers ();
@@ -168,22 +152,10 @@ static void draw_particles ( void )
 
 static void draw_forces(void)
 {
-
 	for_each(forces.begin(), forces.end(), [](IForce* f)
 	{
 		f->draw();
 	});
-	//for_each(gravforces.begin(), gravforces.end(), [](IForce* f)
-	//{
-	//	f->draw();
-	//});
-
-	for_each(mouses.begin(), mouses.end(), [](MouseForce* m)
-	{
-		//cout << mouses.size() << "\n";
-		m->draw();
-	});
-
 }
 
 static void draw_constraints ( void )
@@ -329,11 +301,10 @@ static void get_mouse_pos(void)
 	j = (int)(((win_y - my) / (float)win_y)*N);
 
 	if (!mouse_down[0] && !mouse_down[2] && !mouse_release[0]
-		&& !mouse_shiftclick[0] && !mouse_shiftclick[2]) return;
+	&& !mouse_shiftclick[0] && !mouse_shiftclick[2]) return;
 
 	if (mouse_down[0])
 	{
-
 		x = i - 32;
 		x = (float)(x / 32);
 
@@ -344,7 +315,6 @@ static void get_mouse_pos(void)
 
 		for (i = 0; i<size; i++)
 		{
-
 			MousePos[0] = x;
 			MousePos[1] = y;
 
@@ -361,14 +331,15 @@ static void get_mouse_pos(void)
 			//particle is selected
 			if (particleSelected == i)
 			{
-				mouses[i]->getMouse(MousePos);
-				mouses[i]->setForce(true);
-				mouses[i]->apply();
+				mouseForce -> setMousePosition(MousePos);
+				mouseForce -> setParticle(pVector[particleSelected]);
+				mouseForce -> setEnabled(true);
+				break;
 			}
 			else
 			{
-				mouses[i]->getMouse(pVector[i]->m_Position);
-				mouses[i]->setForce(false);
+				mouseForce -> setMousePosition(MousePos);
+				mouseForce -> setEnabled(false);
 			}
 
 		}
@@ -380,8 +351,8 @@ static void get_mouse_pos(void)
 
 		for (i = 0; i < size; i++)
 		{
-			mouses[i]->getMouse(pVector[i]->m_Position);
-			mouses[i]->setForce(false);
+			mouseForce -> setMousePosition(MousePos);
+			mouseForce -> setEnabled(false);
 		}
 	}
 }
@@ -462,16 +433,14 @@ void createCloth() {
 		}
 	}
 
-	int ks = 5;
-	int kd = 3;
+	double ks = 5;
+	double kd = 3;
 
 	for (int width = 0; width < 5; width++) {
 		//loop through the height of the cloth
 		for (int height = 0; height < 5; height++) {
 			int vectorid = width * 5 + height;
 			cout << "id = " << vectorid << " size =" << pVector.size() << "\n";
-
-			mouses.push_back(new MouseForce(pVector[vectorid], pVector[vectorid]->m_Velocity, 0.5, 0.5));
 
 			forces.push_back(new SpringForce(pVector[0], pVector[1], 0.2, ks, kd));
 			forces.push_back(new SpringForce(pVector[1], pVector[2], 0.2, ks, kd));
@@ -509,22 +478,12 @@ int main ( int argc, char ** argv )
 	printf ( "\t Quit by pressing the 'q' key\n" );
 	printf("\n");
 	printf("\t Press 1 for cloth\n");
-	
-	//int input;
-	//cin >> input;
-	
-	//switch (input) {
-	//case 1:
-		createCloth();
-	//	break;
-	//}
-
 
 	dsim = 0;
 	dump_frames = 0;
 	frame_number = 0;
 
-	//init_system();
+	init_system();
 
 	win_x = 512;
 	win_y = 512;
