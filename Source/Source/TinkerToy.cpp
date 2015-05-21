@@ -9,6 +9,7 @@
 #include "IForce.h"
 #include "IConstraint.h"
 #include "MouseForce.h"
+#include "CircularWireConstraint.h"
 
 #include <iostream>
 #include <fstream>
@@ -87,25 +88,32 @@ static void init_system(void)
 	// Create three particles, attach them to each other, then add a
 	// circular wire constraint to the first.
 
+
 	/*pVector.push_back(new Particle(center + offset));
 	pVector.push_back(new Particle(center + offset + offset + Vec2f(0.1, 0.0)));
 	pVector.push_back(new Particle(center + offset + offset + offset));
 
 	pVector.push_back(new Particle(center - 3 * offset ));*/
 
+	//pVector.push_back(new Particle(center + offset));
+	pVector.push_back(new Particle(center + offset + offset + Vec2f(0.1, 0.0)));
+	pVector.push_back(new Particle(Vec2f(0.5, 0)));
+
+
 	// You shoud replace these with a vector generalized forces and one of
 	// constraints...
-	
+
 	int i, size = pVector.size();
 	for (i = 0; i<size; i++)
 	{
-		mouses.push_back(new MouseForce(pVector[i], pVector[i]->m_Velocity, 0.5, 0.5));
+		//mouses.push_back(new MouseForce(pVector[i], pVector[i]->m_Velocity, 0.5, 0.5));
 	}
 
 
 	//forces.push_back( new SpringForce(pVector[0], pVector[1], dist, 0.3, 0.3));
 
 	// Apply gravity on all particle
+
 	//forces.push_back( new Gravity(pVector[2]));
 
 	for_each(pVector.begin(), pVector.end(), [](Particle* f)
@@ -117,6 +125,15 @@ static void init_system(void)
 	//constraints.push_back(new RodConstraint(pVector[1], pVector[2], dist));
 
 	//constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
+
+	forces.push_back( new Gravity(pVector[0]));
+	forces.push_back( new Gravity(pVector[1]));
+
+	//delete_this_dummy_spring = new SpringForce(pVector[0], pVector[1], dist, 1.0, 1.0);
+	//constraints.push_back(new RodConstraint(pVector[1], pVector[2], dist));
+	constraints.push_back(new CircularWireConstraint (pVector[0], Vec2f(0,0), 0.5));
+	constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
+
 }
 
 /*
