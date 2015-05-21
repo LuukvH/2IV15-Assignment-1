@@ -2,7 +2,7 @@
 
 MidPoint::MidPoint(void)
 {
-	 positions = std::vector<Vec2f>();
+	positions = std::vector<Vec2f>();
 }
 
 void MidPoint::DerivEval(std::vector<Particle*> pVector, std::vector<IForce*> forces, std::vector<IConstraint*> constraints, float dt )
@@ -23,6 +23,8 @@ void MidPoint::DerivEval(std::vector<Particle*> pVector, std::vector<IForce*> fo
 		forces[i] -> apply();
 	}
 
+	ConstraintSolver::Calculate(pVector, constraints, 60, 5);
+
 	// increase velocity for each particle
 	for (unsigned int i = 0; i < pVector.size(); i++) {
 		pVector[i]->m_Velocity += pVector[i] -> m_Force * dt;
@@ -40,13 +42,16 @@ void MidPoint::DerivEval(std::vector<Particle*> pVector, std::vector<IForce*> fo
 	}
 
 	// Calculate forces on midpoint
-	for(int i = 0; i < forces.size(); i++) {
+	for(unsigned int i = 0; i < forces.size(); i++) {
 		forces[i] -> apply();
 	}
 
+	ConstraintSolver::Calculate(pVector, constraints, 60, 5);
+
 	// Displace particle from startposition
 	for (unsigned int i = 0; i < pVector.size(); i++) {
-		pVector[i] -> m_Position = positions[i] + pVector[i] -> m_Velocity;
+		pVector[i] -> m_Velocity += pVector[i] -> m_Force * dt;
+		pVector[i] -> m_Position = positions[i] + pVector[i] -> m_Velocity * dt;
 	}
 }
 
