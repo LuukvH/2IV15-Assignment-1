@@ -89,10 +89,22 @@ static void init_system(void)
 	// Create three particles, attach them to each other, then add a
 	// circular wire constraint to the first.
 
+<<<<<<< HEAD
 	/*pVector.push_back(new Particle(center + offset));
+=======
+
+	/*pVector.push_back(new Particle(center + offset));
+	pVector.push_back(new Particle(center + offset + offset + Vec2f(0.1, 0.0)));
+	pVector.push_back(new Particle(center + offset + offset + offset));
+
+	pVector.push_back(new Particle(center - 3 * offset ));*/
+
+	//pVector.push_back(new Particle(center + offset));
+>>>>>>> 7c54598c171d1aadce7491e6a8302d8a6d068d14
 	pVector.push_back(new Particle(center + offset + offset + Vec2f(0.1, 0.0)));
 	pVector.push_back(new Particle(Vec2f(0.5, 0)));
 	pVector.push_back(new Particle(Vec2f(0, 1)));*/
+
 
 	// You shoud replace these with a vector generalized forces and one of
 	// constraints...
@@ -103,6 +115,7 @@ static void init_system(void)
 	forces.push_back(mouseForce);
 
 	// Apply gravity on all particle
+<<<<<<< HEAD
 	///*forces.push_back( new Gravity(pVector[0]));
 	//forces.push_back( new Gravity(pVector[1]));
 	//forces.push_back( new Gravity(pVector[2]));
@@ -114,6 +127,29 @@ static void init_system(void)
 	//constraints.push_back(new CircularWireConstraint (pVector[0], Vec2f(0,0), 0.5));
 	//constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
 	//constraints.push_back(new HorizontalWireConstraint (pVector[2], 1));*/
+=======
+
+	//forces.push_back( new Gravity(pVector[2]));
+
+	for_each(pVector.begin(), pVector.end(), [](Particle* f)
+	{
+		//forces.push_back(new Gravity(f));
+	});
+
+	//delete_this_dummy_spring = new SpringForce(pVector[0], pVector[1], dist, 1.0, 1.0);
+	//constraints.push_back(new RodConstraint(pVector[1], pVector[2], dist));
+
+	//constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
+
+	forces.push_back( new Gravity(pVector[0]));
+	forces.push_back( new Gravity(pVector[1]));
+
+	//delete_this_dummy_spring = new SpringForce(pVector[0], pVector[1], dist, 1.0, 1.0);
+	//constraints.push_back(new RodConstraint(pVector[1], pVector[2], dist));
+	constraints.push_back(new CircularWireConstraint (pVector[0], Vec2f(0,0), 0.5));
+	constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
+
+>>>>>>> 7c54598c171d1aadce7491e6a8302d8a6d068d14
 }
 
 /*
@@ -156,6 +192,20 @@ static void draw_forces(void)
 	{
 		f->draw();
 	});
+<<<<<<< HEAD
+=======
+	//for_each(gravforces.begin(), gravforces.end(), [](IForce* f)
+	//{
+	//	f->draw();
+	//});
+
+	for_each(mouses.begin(), mouses.end(), [](MouseForce* m)
+	{
+		//cout << mouses.size() << "\n";
+		//m->draw();
+	});
+
+>>>>>>> 7c54598c171d1aadce7491e6a8302d8a6d068d14
 }
 
 static void draw_constraints ( void )
@@ -421,7 +471,7 @@ Creates a 5x5 grid of cloth
 
 void createCloth() {
 
-	Vec2f clothStart = (0.0, 0.0);
+	Vec2f clothStart = (0.1, 0.1);
 
 	//loop through the width of the cloth
 	for (int width = 0; width < 5; width++) {
@@ -430,21 +480,70 @@ void createCloth() {
 			float fWidth = width;
 			float fHeight = -height;
 			pVector.push_back(new Particle(clothStart + Vec2f(fWidth / 5, fHeight / 5)));
+			cout << "pvector = " << Vec2f(fWidth / 5, fHeight / 5) << " particle created" << "\n";
+			//mouses.push_back(new MouseForce(pVector[vectorid], pVector[vectorid]->m_Velocity, 0.5, 0.5));
 		}
 	}
 
+<<<<<<< HEAD
 	double ks = 5;
 	double kd = 3;
+=======
+	int ks = 4;
+	int kd = 2;
+
+
+	//mouses.push_back(new MouseForce(pVector[vectorid], pVector[vectorid]->m_Velocity, 0.5, 0.5));
+
+	//forces.push_back(new SpringForce(pVector[0], pVector[1], 0.2, ks, kd));
+	//forces.push_back(new SpringForce(pVector[1], pVector[2], 0.2, ks, kd));
+
+>>>>>>> 7c54598c171d1aadce7491e6a8302d8a6d068d14
 
 	for (int width = 0; width < 5; width++) {
 		//loop through the height of the cloth
 		for (int height = 0; height < 5; height++) {
 			int vectorid = width * 5 + height;
+<<<<<<< HEAD
 			cout << "id = " << vectorid << " size =" << pVector.size() << "\n";
 
 			forces.push_back(new SpringForce(pVector[0], pVector[1], 0.2, ks, kd));
 			forces.push_back(new SpringForce(pVector[1], pVector[2], 0.2, ks, kd));
 			//forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 1], 0.2, ks, kd));
+=======
+			//cout << "id = " << vectorid << " size =" << pVector.size() << "\n";
+
+			
+			if (vectorid < 24) {
+				if (height < 4) {
+					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 1], 0.2, ks, kd));
+				}
+				if (width < 4) {
+					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 5], 0.2, ks, kd));
+				}
+				float length = sqrt(0.2*0.2 * 2);
+				if (height < 4 && width < 4) {
+					//float length = sqrt(0.2*0.2*2);
+					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 6], length, ks, kd));
+				}
+				if (height > 0 && width < 4) {
+					//if (vectorid + 4 < pVector.size() && vectorid + 4 > 0) {
+						forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 4], length, ks, kd));
+					//}
+
+				}
+				if (vectorid - 4 < pVector.size() && vectorid - 4 > 0) {
+					//forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid - 4], length, ks, kd));
+				}
+
+				if (height < 3) {
+					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 2], 0.4, ks, kd));
+				}
+				if (width < 3) {
+					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 10], 0.4, ks, kd));
+				}
+			}
+>>>>>>> 7c54598c171d1aadce7491e6a8302d8a6d068d14
 		}
 	}
 }
