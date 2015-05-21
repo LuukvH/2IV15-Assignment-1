@@ -1,9 +1,7 @@
 #include "DragForce.h"
 
-DragForce::DragForce(Particle *p, float factor) :
-	m_p(p), m_factor(factor)
-{
-}
+DragForce::DragForce(Particle *p, double factor) :
+	m_p(p), m_factor(factor) {}
 
 void DragForce::apply()
 {
@@ -11,7 +9,3 @@ void DragForce::apply()
 }
 
 void DragForce::draw() {}
-
-DragForce::~DragForce(void)
-{
-}

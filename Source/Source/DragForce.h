@@ -1,22 +1,19 @@
 #pragma once
 
-#include "IForce.h"
 #include "Particle.h"
+#include "IForce.h"
 
-class DragForce : public IForce
+class DragForce: public IForce
 {
 public:
-	DragForce(Particle *p, float factor);
+	DragForce(Particle *p, double factor);
 
 	virtual void apply();
 
 	virtual void draw();
 
-	~DragForce(void);
-
 private:
-	Particle* m_p;
-	float m_factor;
 
+	Particle * const m_p;   // particle 1
+	double const m_factor; // spring strength constants
 };
-

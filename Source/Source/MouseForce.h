@@ -1,21 +1,26 @@
 #pragma once
 
 #include "Particle.h"
-#include "Force.h"
+#include "IForce.h"
+#include "SpringForce.h"
 
-class MouseForce : public Force
+class MouseForce : public IForce
 {
 public:
-	MouseForce(Particle *p, Vec2f & Mouse, double ks, double kd);
+	MouseForce();
 
-	void getMouse(const Vec2f & Mouse);
-	void setForce(bool applyForce);
-	void draw();
-	void apply();
+	virtual void draw();
+	virtual void apply();
 
+	void setMousePosition(const Vec2f & mouse);
+	void setEnabled(bool applyForce);
+
+	void setParticle(Particle * p);
 private:
+	
+	Particle * m_p;   // particle 1
+	Particle* m_mouse;
 
-	Particle * const m_p;   // particle 1
-	Vec2f m_mouse;
-	double const m_ks, m_kd; // spring strength constants
+	bool m_enabled;
+	double  m_ks, m_kd; // spring strength constants
 };

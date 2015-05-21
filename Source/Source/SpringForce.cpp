@@ -22,7 +22,7 @@ void SpringForce::apply()
 	Vec2f f = (m_ks * (l_length - m_dist) + m_kd * (((m_p1->m_Velocity - m_p2->m_Velocity) * l) / l_length)) * (l / l_length);
 
 	//move vector 1 towards vector 2 and 2 towards vector 1
-	//m_p1 -> m_Force -= f; //this moves point 1
+	m_p1 -> m_Force -= f; //this moves point 1
 	m_p2 -> m_Force += f; //this moves point 2
 }
 
