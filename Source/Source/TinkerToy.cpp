@@ -85,13 +85,12 @@ static void init_system(void)
 	const double dist = 0.2;
 	const Vec2f center(0.0, 0.0);
 	const Vec2f offset(dist, 0.0);
-	
+
 	// Create three particles, attach them to each other, then add a
 	// circular wire constraint to the first.
 
-<<<<<<< HEAD
 	/*pVector.push_back(new Particle(center + offset));
-=======
+
 
 	/*pVector.push_back(new Particle(center + offset));
 	pVector.push_back(new Particle(center + offset + offset + Vec2f(0.1, 0.0)));
@@ -100,10 +99,9 @@ static void init_system(void)
 	pVector.push_back(new Particle(center - 3 * offset ));*/
 
 	//pVector.push_back(new Particle(center + offset));
->>>>>>> 7c54598c171d1aadce7491e6a8302d8a6d068d14
-	pVector.push_back(new Particle(center + offset + offset + Vec2f(0.1, 0.0)));
-	pVector.push_back(new Particle(Vec2f(0.5, 0)));
-	pVector.push_back(new Particle(Vec2f(0, 1)));*/
+	//pVector.push_back(new Particle(center + offset + offset + Vec2f(0.1, 0.0)));
+	//pVector.push_back(new Particle(Vec2f(0.5, 0)));
+	//pVector.push_back(new Particle(Vec2f(0, 1)));
 
 
 	// You shoud replace these with a vector generalized forces and one of
@@ -115,7 +113,6 @@ static void init_system(void)
 	forces.push_back(mouseForce);
 
 	// Apply gravity on all particle
-<<<<<<< HEAD
 	///*forces.push_back( new Gravity(pVector[0]));
 	//forces.push_back( new Gravity(pVector[1]));
 	//forces.push_back( new Gravity(pVector[2]));
@@ -127,29 +124,8 @@ static void init_system(void)
 	//constraints.push_back(new CircularWireConstraint (pVector[0], Vec2f(0,0), 0.5));
 	//constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
 	//constraints.push_back(new HorizontalWireConstraint (pVector[2], 1));*/
-=======
 
-	//forces.push_back( new Gravity(pVector[2]));
 
-	for_each(pVector.begin(), pVector.end(), [](Particle* f)
-	{
-		//forces.push_back(new Gravity(f));
-	});
-
-	//delete_this_dummy_spring = new SpringForce(pVector[0], pVector[1], dist, 1.0, 1.0);
-	//constraints.push_back(new RodConstraint(pVector[1], pVector[2], dist));
-
-	//constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
-
-	forces.push_back( new Gravity(pVector[0]));
-	forces.push_back( new Gravity(pVector[1]));
-
-	//delete_this_dummy_spring = new SpringForce(pVector[0], pVector[1], dist, 1.0, 1.0);
-	//constraints.push_back(new RodConstraint(pVector[1], pVector[2], dist));
-	constraints.push_back(new CircularWireConstraint (pVector[0], Vec2f(0,0), 0.5));
-	constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
-
->>>>>>> 7c54598c171d1aadce7491e6a8302d8a6d068d14
 }
 
 /*
@@ -170,7 +146,7 @@ static void pre_display ( void )
 
 static void post_display ( void )
 {
-	
+
 	frame_number++;
 
 	glutSwapBuffers ();
@@ -192,20 +168,6 @@ static void draw_forces(void)
 	{
 		f->draw();
 	});
-<<<<<<< HEAD
-=======
-	//for_each(gravforces.begin(), gravforces.end(), [](IForce* f)
-	//{
-	//	f->draw();
-	//});
-
-	for_each(mouses.begin(), mouses.end(), [](MouseForce* m)
-	{
-		//cout << mouses.size() << "\n";
-		//m->draw();
-	});
-
->>>>>>> 7c54598c171d1aadce7491e6a8302d8a6d068d14
 }
 
 static void draw_constraints ( void )
@@ -338,71 +300,57 @@ static void reshape_func ( int width, int height )
 relates mouse movements to tinker toy construction
 ----------------------------------------------------------------------
 */
-
-static void get_mouse_pos(void)
-{
-	//screen is -1 to 1 in both x and y pos
-	//mouse pos is from 0 to 64
-	float x = 0;
-	float y = 0;
-
+static void update_mouse_position(void) {
 	int i, j;
 	i = (int)((mx / (float)win_x)*N);
 	j = (int)(((win_y - my) / (float)win_y)*N);
 
+	float x = i - 32;
+	x = (float)(x / 32);
+
+	float y = j - 32;
+	y = (float)(y / 32);
+
+	MousePos[0] = x;
+	MousePos[1] = y;
+
+	mouseForce -> setMousePosition(MousePos);
+}
+static bool released = true;
+static void get_mouse_pos(void)
+{
+
 	if (!mouse_down[0] && !mouse_down[2] && !mouse_release[0]
 	&& !mouse_shiftclick[0] && !mouse_shiftclick[2]) return;
 
-	if (mouse_down[0])
+	update_mouse_position();
+	
+	if (!mouse_down[0]) {
+		released = true;
+		mouseForce -> setEnabled(false);
+	}
+
+	if (mouse_down[2]) {
+		mouseForce -> clear();
+	}
+
+	if (mouse_down[0] && released)
 	{
-		x = i - 32;
-		x = (float)(x / 32);
-
-		y = j - 32;
-		y = (float)(y / 32);
-
 		int i, size = pVector.size();
 
 		for (i = 0; i<size; i++)
-		{
-			MousePos[0] = x;
-			MousePos[1] = y;
+		{	
+			Vec2f dist = pVector[i]->m_Position - mouseForce -> getMousePosition();
+			float distance = dist * dist;
 
-			float xDis = pVector[i]->m_Position[0] - MousePos[0];
-			float yDis = pVector[i]->m_Position[1] - MousePos[1];
-
-			float distance = xDis*xDis + yDis*yDis;
-
-			if (distance < 0.001)
+			if (distance < 0.01)
 			{
-				particleSelected = i;
-			}
-
-			//particle is selected
-			if (particleSelected == i)
-			{
+				released = false;
 				mouseForce -> setMousePosition(MousePos);
-				mouseForce -> setParticle(pVector[particleSelected]);
+				mouseForce -> setParticle(pVector[i]);
 				mouseForce -> setEnabled(true);
 				break;
 			}
-			else
-			{
-				mouseForce -> setMousePosition(MousePos);
-				mouseForce -> setEnabled(false);
-			}
-
-		}
-	}
-	else
-	{
-		particleSelected = -1;
-		int i, size = pVector.size();
-
-		for (i = 0; i < size; i++)
-		{
-			mouseForce -> setMousePosition(MousePos);
-			mouseForce -> setEnabled(false);
 		}
 	}
 }
@@ -468,82 +416,54 @@ create cloth
 
 Creates a 5x5 grid of cloth
 */
+Particle* getParticle(int width, int height, int x, int y) {
+	return pVector[y * width + x];
+}
 
 void createCloth() {
+	double ks = 1;
+	double kd = 1;
 
-	Vec2f clothStart = (0.1, 0.1);
+	int width = 4;
+	int height = 4;
+	double dist = 0.2;
 
-	//loop through the width of the cloth
-	for (int width = 0; width < 5; width++) {
-		//loop through the height of the cloth
-		for (int height = 0; height < 5; height++) {
-			float fWidth = width;
-			float fHeight = -height;
-			pVector.push_back(new Particle(clothStart + Vec2f(fWidth / 5, fHeight / 5)));
-			cout << "pvector = " << Vec2f(fWidth / 5, fHeight / 5) << " particle created" << "\n";
-			//mouses.push_back(new MouseForce(pVector[vectorid], pVector[vectorid]->m_Velocity, 0.5, 0.5));
-		}
-	}
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
 
-<<<<<<< HEAD
-	double ks = 5;
-	double kd = 3;
-=======
-	int ks = 4;
-	int kd = 2;
+			// Currently added particle
+			Particle* p = new Particle(Vec2f(x * dist, y * -dist));
+			pVector.push_back(p);
 
-
-	//mouses.push_back(new MouseForce(pVector[vectorid], pVector[vectorid]->m_Velocity, 0.5, 0.5));
-
-	//forces.push_back(new SpringForce(pVector[0], pVector[1], 0.2, ks, kd));
-	//forces.push_back(new SpringForce(pVector[1], pVector[2], 0.2, ks, kd));
-
->>>>>>> 7c54598c171d1aadce7491e6a8302d8a6d068d14
-
-	for (int width = 0; width < 5; width++) {
-		//loop through the height of the cloth
-		for (int height = 0; height < 5; height++) {
-			int vectorid = width * 5 + height;
-<<<<<<< HEAD
-			cout << "id = " << vectorid << " size =" << pVector.size() << "\n";
-
-			forces.push_back(new SpringForce(pVector[0], pVector[1], 0.2, ks, kd));
-			forces.push_back(new SpringForce(pVector[1], pVector[2], 0.2, ks, kd));
-			//forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 1], 0.2, ks, kd));
-=======
-			//cout << "id = " << vectorid << " size =" << pVector.size() << "\n";
-
-			
-			if (vectorid < 24) {
-				if (height < 4) {
-					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 1], 0.2, ks, kd));
-				}
-				if (width < 4) {
-					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 5], 0.2, ks, kd));
-				}
-				float length = sqrt(0.2*0.2 * 2);
-				if (height < 4 && width < 4) {
-					//float length = sqrt(0.2*0.2*2);
-					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 6], length, ks, kd));
-				}
-				if (height > 0 && width < 4) {
-					//if (vectorid + 4 < pVector.size() && vectorid + 4 > 0) {
-						forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 4], length, ks, kd));
-					//}
-
-				}
-				if (vectorid - 4 < pVector.size() && vectorid - 4 > 0) {
-					//forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid - 4], length, ks, kd));
-				}
-
-				if (height < 3) {
-					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 2], 0.4, ks, kd));
-				}
-				if (width < 3) {
-					forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 10], 0.4, ks, kd));
-				}
+			if (x > 0) { 
+				Particle *p1 = getParticle(width, height, x-1, y);
+				forces.push_back(new SpringForce(p, p1, ks, kd));
 			}
->>>>>>> 7c54598c171d1aadce7491e6a8302d8a6d068d14
+
+			if (x > 1) { 
+				Particle *p1 = getParticle(width, height, x - 2, y);
+				forces.push_back(new SpringForce(p, p1, ks, kd));
+			}
+
+			if (y > 0) { 
+				Particle *p2 = getParticle(width, height, x, y - 1);
+				forces.push_back(new SpringForce(p, p2, ks, kd));
+			}
+
+			if (y > 1) { 
+				Particle *p2 = getParticle(width, height, x, y - 2);
+				forces.push_back(new SpringForce(p, p2, ks, kd));
+			}
+
+			if (x > 0 && y > 0) { 
+				Particle *p3 = getParticle(width, height, x - 1, y - 1);
+				forces.push_back(new SpringForce(p, p3, ks, kd));
+			}
+
+			if (x < width - 1 && y > 0) { 
+				Particle *p4 = getParticle(width, height, x + 1, y - 1);
+				forces.push_back(new SpringForce(p, p4, ks, kd));
+			}
 		}
 	}
 }

@@ -1,28 +1,23 @@
-<<<<<<< HEAD
-﻿Build started 21-5-2015 16:14:49.
+﻿Build started 21-5-2015 19:58:09.
      1>Project "C:\Users\Luuk\Documents\GitHub\2IV15-Assignment-1\Source\Source\Source.vcxproj" on node 2 (Build target(s)).
        Project file contains ToolsVersion="12.0". This toolset may be unknown or missing, in which case you may be able to resolve this by installing the appropriate version of MSBuild, or the build may have been forced to a particular ToolsVersion for policy reasons. Treating the project as if it had ToolsVersion="4.0". For more information, please see http://go.microsoft.com/fwlink/?LinkId=291333.
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Ilib/ /Iinclude/ /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt TinkerToy.cpp
-=======
-﻿Build started 21-5-2015 15:00:29.
-     1>Project "C:\git\2IV15-Assignment-1\Source\Source\Source.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Ilib/ /Iinclude/ /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt MidPoint.cpp TinkerToy.cpp linearSolver.cpp
-         linearSolver.cpp
->>>>>>> 7c54598c171d1aadce7491e6a8302d8a6d068d14
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Ilib/ /Iinclude/ /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt DragForce.cpp Euler.cpp Gravity.cpp MidPoint.cpp MouseForce.cpp RungeKutta4thOrder.cpp Solver.cpp SpringForce.cpp TinkerToy.cpp
          TinkerToy.cpp
      1>c:\users\luuk\documents\github\2iv15-assignment-1\source\source\include\gfx\vec2.h(97): warning C4005: '_MSC_VER' : macro redefinition
                  command-line arguments :  see previous definition of '_MSC_VER'
-<<<<<<< HEAD
-=======
-     1>c:\git\2iv15-assignment-1\source\source\tinkertoy.cpp(524): warning C4018: '<' : signed/unsigned mismatch
-         MidPoint.cpp
-     1>c:\git\2iv15-assignment-1\source\source\include\gfx\vec2.h(97): warning C4005: '_MSC_VER' : macro redefinition
+         MouseForce.cpp
+     1>c:\users\luuk\documents\github\2iv15-assignment-1\source\source\include\gfx\vec2.h(97): warning C4005: '_MSC_VER' : macro redefinition
                  command-line arguments :  see previous definition of '_MSC_VER'
-     1>c:\git\2iv15-assignment-1\source\source\constraintsolver.h(9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
          Generating Code...
->>>>>>> 7c54598c171d1aadce7491e6a8302d8a6d068d14
+         Skipping... (no relevant changes detected)
+         SpringForce.cpp
+         Solver.cpp
+         RungeKutta4thOrder.cpp
+         MidPoint.cpp
+         Gravity.cpp
+         Euler.cpp
+         DragForce.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Luuk\Documents\GitHub\2IV15-Assignment-1\Source\Debug\Source.exe" /INCREMENTAL /NOLOGO /LIBPATH:lib/ glut32.lib libpng16.lib zlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Luuk\Documents\GitHub\2IV15-Assignment-1\Source\Debug\Source.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Luuk\Documents\GitHub\2IV15-Assignment-1\Source\Debug\Source.lib" /MACHINE:X86 Debug\CircularWireConstraint.obj
          Debug\ConstraintSolver.obj
@@ -41,19 +36,13 @@
          Debug\Solver.obj
          Debug\SpringForce.obj
          Debug\TinkerToy.obj
-<<<<<<< HEAD
+     1>RodConstraint.obj : warning LNK4099: PDB 'vc110.pdb' was not found with 'RodConstraint.obj' or at 'C:\Users\Luuk\Documents\GitHub\2IV15-Assignment-1\Source\Debug\vc110.pdb'; linking object as if no debug info
+     1>Matrix.obj : warning LNK4099: PDB 'vc110.pdb' was not found with 'Matrix.obj' or at 'C:\Users\Luuk\Documents\GitHub\2IV15-Assignment-1\Source\Debug\vc110.pdb'; linking object as if no debug info
+     1>imageio.obj : warning LNK4099: PDB 'vc110.pdb' was not found with 'imageio.obj' or at 'C:\Users\Luuk\Documents\GitHub\2IV15-Assignment-1\Source\Debug\vc110.pdb'; linking object as if no debug info
+     1>ConstraintSolver.obj : warning LNK4099: PDB 'vc110.pdb' was not found with 'ConstraintSolver.obj' or at 'C:\Users\Luuk\Documents\GitHub\2IV15-Assignment-1\Source\Debug\vc110.pdb'; linking object as if no debug info
          Source.vcxproj -> C:\Users\Luuk\Documents\GitHub\2IV15-Assignment-1\Source\Debug\Source.exe
      1>Done Building Project "C:\Users\Luuk\Documents\GitHub\2IV15-Assignment-1\Source\Source\Source.vcxproj" (Build target(s)).
-=======
-     1>TinkerToy.obj : error LNK2019: unresolved external symbol "public: __thiscall CircularWireConstraint::CircularWireConstraint(class Particle *,class gfx::TVec2<float> const &,double)" (??0CircularWireConstraint@@QAE@PAVParticle@@ABV?$TVec2@M@gfx@@N@Z) referenced in function "void __cdecl init_system(void)" (?init_system@@YAXXZ)
-     1>C:\git\2IV15-Assignment-1\Source\Debug\Source.exe : fatal error LNK1120: 1 unresolved externals
-     1>Done Building Project "C:\git\2IV15-Assignment-1\Source\Source\Source.vcxproj" (Build target(s)) -- FAILED.
->>>>>>> 7c54598c171d1aadce7491e6a8302d8a6d068d14
 
-Build FAILED.
+Build succeeded.
 
-<<<<<<< HEAD
-Time Elapsed 00:00:01.86
-=======
-Time Elapsed 00:00:03.70
->>>>>>> 7c54598c171d1aadce7491e6a8302d8a6d068d14
+Time Elapsed 00:00:01.94
