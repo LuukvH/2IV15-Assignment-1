@@ -1,18 +1,24 @@
 #pragma once
 
 #include "Particle.h"
-#include "IForce.h"
+#include "IConstraint.h"
 
+class RodConstraint: public IConstraint 
+{
 
-class RodConstraint: public IForce {
- public:
-  RodConstraint(Particle *p1, Particle * p2, double dist);
+public:
+	RodConstraint(Particle *p1, Particle * p2, double dist);
 
-  void draw();
-  void apply();
- private:
+	virtual float getC();
+	virtual float getCdot();
+	virtual std::vector<Vec2f> getJ();
+	virtual std::vector<Vec2f> getJdot();
+		
+	virtual void draw();
 
-  Particle * const m_p1;
-  Particle * const m_p2;
-  double const m_dist;
+private:
+	Particle* m_p1;
+	Particle* m_p2;
+	float m_dist;
+
 };

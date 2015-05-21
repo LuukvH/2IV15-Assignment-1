@@ -1,11 +1,13 @@
 #pragma once
 
+#include "Particle.h"
+#include "IForce.h"
+#include "IConstraint.h"
+#include "ConstraintSolver.h"
+#include <vector>
+
 class IntegrationScheme
 {
- public:
-	 // Get dim(x)
-	 // Get/set x and t
-	 // Deriv Eval at current (x,t)
-
-	 virtual void DerivEval();
+public:
+	virtual void DerivEval(std::vector<Particle*> pVector,  std::vector<IForce*> forces, std::vector<IConstraint*> constraints, float dt ) = 0;
 };

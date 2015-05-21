@@ -1,43 +1,41 @@
 #include "RodConstraint.h"
-#include <glut.h>
-#include <iostream>
-using namespace std;
 
 RodConstraint::RodConstraint(Particle *p1, Particle * p2, double dist) :
-  m_p1(p1), m_p2(p2), m_dist(dist) {}
-
-
-void RodConstraint::apply() {
-	float ks = 0.8;
-	float kd = 1;
-
-	Vec2f posdif = (m_p1->m_Position - m_p2->m_Position); //create a vector with the difference in distance
-	Vec2f speeddif = (m_p1->m_Velocity - m_p2->m_Velocity); //create a vector with the difference in speed
-
-
-
-	float posLength = sqrt(posdif * posdif); //length of the position vector
-	float CDot = (speeddif * speeddif); //dot product of speed vector
-
-	//cout << posLength - testLength << '\n';
-
-	float C = (posdif * posdif - m_dist * m_dist); //
-	
-
-	Vec2f force_p1 = (posdif / posLength)*(ks * C);
-	Vec2f force_p2 = -force_p1;
-
-	m_p1->m_Force -= force_p1;
-	m_p2->m_Force -= force_p2;
-
+	m_p1(p1), m_p2(p2), m_dist(dist)
+{
+	particles.push_back(m_p1);
+	particles.push_back(m_p2);
 }
+
+// C(x1, y1, x2, y2) = (x1 - x2)^2 + (y1 - y2)^2 - r^2
+float RodConstraint::getC() {
+	return ((m_p1 -> m_Position - m_p2 -> m_Position) * (m_p1 -> m_Position - m_p2 -> m_Position)) - (m_dist * m_dist);
+}
+
+float RodConstraint::getCdot() {
+	return (Vec2f(2, 2) * (m_p1->m_Position - m_p2->m_Position)) * (Vec2f(2, 2)  * (m_p1->m_Velocity - m_p2->m_Velocity));
+}
+
+std::vector<Vec2f> RodConstraint::getJ() {
+	std::vector<Vec2f> j;
+	j.push_back((m_p1 -> m_Position - m_p2 -> m_Position) * 2);
+	j.push_back((m_p2 -> m_Position - m_p1 -> m_Position) * 2);
+	return j;
+}
+
+std::vector<Vec2f> RodConstraint::getJdot() {
+	std::vector<Vec2f> jdot;
+	jdot.push_back((m_p1 -> m_Velocity - m_p2 -> m_Velocity) * 2);
+	jdot.push_back((m_p2 -> m_Velocity - m_p1 -> m_Velocity) * 2);
+	return jdot;
+}
+
 void RodConstraint::draw()
 {
-  glBegin( GL_LINES );
-  glColor3f(0.8, 0.7, 0.6);
-  glVertex2f( m_p1->m_Position[0], m_p1->m_Position[1] );
-  glColor3f(0.8, 0.7, 0.6);
-  glVertex2f( m_p2->m_Position[0], m_p2->m_Position[1] );
-  glEnd();
-
+	glBegin( GL_LINES );
+	glColor3f(0.8, 0.7, 0.6);
+	glVertex2f( m_p1->m_Position[0], m_p1->m_Position[1] );
+	glColor3f(0.8, 0.7, 0.6);
+	glVertex2f( m_p2->m_Position[0], m_p2->m_Position[1] );
+	glEnd();
 }

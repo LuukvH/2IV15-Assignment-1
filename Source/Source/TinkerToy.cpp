@@ -5,11 +5,11 @@
 #include "SpringForce.h"
 #include "Gravity.h"
 #include "RodConstraint.h"
-#include "CircularWireConstraint.h"
 #include "imageio.h"
 #include "IForce.h"
+#include "IConstraint.h"
 #include "MouseForce.h"
-#include "Force.h"
+
 #include <iostream>
 #include <fstream>
 
@@ -24,10 +24,9 @@ using namespace std;
 /* macros */
 
 /* external definitions (from solver) */
-extern void simulation_step(std::vector<Particle*> pVector, std::vector<IForce*> forces, std::vector<IForce*> gravforces, std::vector<IForce*> constraints, float dt);
+extern void simulation_step( std::vector<Particle*> pVector, std::vector<IForce*> forces, std::vector<IConstraint*> constraints, float dt );
 
 /* global variables */
-
 static int N;
 static float dt, d;
 static int dsim;
@@ -51,14 +50,7 @@ int particleSelected = -1;
 
 static std::vector<MouseForce*> mouses;
 static std::vector<IForce*> forces;
-static std::vector<IForce*> gravforces;
-static std::vector<IForce*> gravforcesEmpty;
-static std::vector<IForce*> constraints;
-
-static SpringForce * delete_this_dummy_spring = NULL;
-static RodConstraint * delete_this_dummy_rod = NULL;
-static CircularWireConstraint * delete_this_dummy_wire = NULL;
-
+static std::vector<IConstraint*> constraints;
 
 /*
 ----------------------------------------------------------------------
@@ -69,18 +61,8 @@ free/clear/allocate simulation data
 static void free_data ( void )
 {
 	pVector.clear();
-	if (delete_this_dummy_rod) {
-		delete delete_this_dummy_rod;
-		delete_this_dummy_rod = NULL;
-	}
-	if (delete_this_dummy_spring) {
-		delete delete_this_dummy_spring;
-		delete_this_dummy_spring = NULL;
-	}
-	if (delete_this_dummy_wire) {
-		delete delete_this_dummy_wire;
-		delete_this_dummy_wire = NULL;
-	}
+	forces.clear();
+	constraints.clear();
 }
 
 static void clear_data ( void )
@@ -123,21 +105,13 @@ static void init_system(void)
 
 	forces.push_back( new SpringForce(pVector[0], pVector[1], dist, 0.3, 0.3));
 
-	// Apply gravity on all particles
-
-	/*for (int p = 0; p < pVector.size(); p++) {
-		forces.push_back( new Gravity(pVector[p]));
-	}*/
-
-	//apply gravity on the 2nd particle
-	gravforces.push_back(new Gravity(pVector[1]));
-	
-
-	//constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
+	// Apply gravity on all particle
+	forces.push_back( new Gravity(pVector[2]));
 
 	//delete_this_dummy_spring = new SpringForce(pVector[0], pVector[1], dist, 1.0, 1.0);
-	//delete_this_dummy_rod = new RodConstraint(pVector[1], pVector[2], dist);
-	delete_this_dummy_wire = new CircularWireConstraint(pVector[0], center, dist);
+	constraints.push_back(new RodConstraint(pVector[1], pVector[2], dist));
+
+	//constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
 }
 
 /*
@@ -210,18 +184,16 @@ static void draw_forces(void)
 		m->draw();
 	});
 
-
-
-
 }
 
 static void draw_constraints ( void )
 {
-	// change this to iteration over full set
-	if (delete_this_dummy_rod)
-		delete_this_dummy_rod->draw();
-	if (delete_this_dummy_wire)
-		delete_this_dummy_wire->draw();
+	int size = constraints.size();
+
+	for(int n=0; n< size; n++)
+	{
+		constraints[n]->draw();
+	}
 }
 
 /*
@@ -312,10 +284,6 @@ static void key_func ( unsigned char key, int x, int y )
 		break;
 	}
 }
-
-
-
-
 
 static void mouse_func ( int button, int state, int x, int y )
 {
@@ -420,10 +388,8 @@ static void get_mouse_pos(void)
 
 static void idle_func ( void )
 {
-
-	if (dsim) simulation_step(pVector, forces, (grav ? gravforces : gravforcesEmpty), constraints, dt);
-	else        { get_from_UI(); remap_GUI(); }
-
+	if ( dsim ) simulation_step( pVector, forces, constraints, dt );
+	else        {get_from_UI();remap_GUI();}
 
 	get_mouse_pos();
 	glutSetWindow ( win_id );
@@ -440,8 +406,6 @@ static void display_func ( void )
 
 	post_display ();
 }
-
-
 
 
 /*
@@ -570,4 +534,3 @@ int main ( int argc, char ** argv )
 
 	exit ( 0 );
 }
-

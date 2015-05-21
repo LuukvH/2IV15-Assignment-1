@@ -11,26 +11,36 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CircularWireConstraint.cpp" />
+    <ClCompile Include="ConstraintSolver.cpp" />
+    <ClCompile Include="Euler.cpp" />
     <ClCompile Include="Gravity.cpp" />
     <ClCompile Include="imageio.cpp" />
     <ClCompile Include="linearSolver.cpp" />
+    <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="MidPoint.cpp" />
     <ClCompile Include="MouseForce.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="RodConstraint.cpp" />
+    <ClCompile Include="RungeKutta4thOrder.cpp" />
     <ClCompile Include="Solver.cpp" />
     <ClCompile Include="SpringForce.cpp" />
     <ClCompile Include="TinkerToy.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CircularWireConstraint.h" />
+    <ClInclude Include="ConstraintSolver.h" />
+    <ClInclude Include="Euler.h" />
     <ClInclude Include="Gravity.h" />
+    <ClInclude Include="IConstraint.h" />
     <ClInclude Include="IForce.h" />
     <ClInclude Include="imageio.h" />
+    <ClInclude Include="IntegrationScheme.h" />
     <ClInclude Include="linearSolver.h" />
+    <ClInclude Include="Matrix.h" />
+    <ClInclude Include="MidPoint.h" />
     <ClInclude Include="MouseForce.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="RodConstraint.h" />
+    <ClInclude Include="RungeKutta4thOrder.h" />
     <ClInclude Include="SpringForce.h" />
   </ItemGroup>
   <ItemGroup>
