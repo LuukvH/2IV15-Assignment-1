@@ -199,13 +199,14 @@ static void draw_forces(void)
 	{
 		f->draw();
 	});
-		for_each(gravforces.begin(), gravforces.end(), [](IForce* f)
-		{
-			f->draw();
-		});
+	//for_each(gravforces.begin(), gravforces.end(), [](IForce* f)
+	//{
+	//	f->draw();
+	//});
 
 	for_each(mouses.begin(), mouses.end(), [](MouseForce* m)
 	{
+		//cout << mouses.size() << "\n";
 		m->draw();
 	});
 
@@ -478,6 +479,44 @@ static void open_glut_window ( void )
 
 
 /*
+create cloth
+
+Creates a 5x5 grid of cloth
+*/
+
+void createCloth() {
+
+	Vec2f clothStart = (0.0, 0.0);
+
+	//loop through the width of the cloth
+	for (int width = 0; width < 5; width++) {
+		//loop through the height of the cloth
+		for (int height = 0; height < 5; height++) {
+			float fWidth = width;
+			float fHeight = -height;
+			pVector.push_back(new Particle(clothStart + Vec2f(fWidth / 5, fHeight / 5)));
+		}
+	}
+
+	int ks = 5;
+	int kd = 3;
+
+	for (int width = 0; width < 5; width++) {
+		//loop through the height of the cloth
+		for (int height = 0; height < 5; height++) {
+			int vectorid = width * 5 + height;
+			cout << "id = " << vectorid << " size =" << pVector.size() << "\n";
+
+			mouses.push_back(new MouseForce(pVector[vectorid], pVector[vectorid]->m_Velocity, 0.5, 0.5));
+
+			forces.push_back(new SpringForce(pVector[0], pVector[1], 0.2, ks, kd));
+			forces.push_back(new SpringForce(pVector[1], pVector[2], 0.2, ks, kd));
+			//forces.push_back(new SpringForce(pVector[vectorid], pVector[vectorid + 1], 0.2, ks, kd));
+		}
+	}
+}
+
+/*
 ----------------------------------------------------------------------
 main --- main routine
 ----------------------------------------------------------------------
@@ -504,12 +543,24 @@ int main ( int argc, char ** argv )
 	printf ( "\t Toggle construction/simulation display with the spacebar key\n" );
 	printf ( "\t Dump frames by pressing the 'd' key\n" );
 	printf ( "\t Quit by pressing the 'q' key\n" );
+	printf("\n");
+	printf("\t Press 1 for cloth\n");
+	
+	//int input;
+	//cin >> input;
+	
+	//switch (input) {
+	//case 1:
+		createCloth();
+	//	break;
+	//}
+
 
 	dsim = 0;
 	dump_frames = 0;
 	frame_number = 0;
 
-	init_system();
+	//init_system();
 
 	win_x = 512;
 	win_y = 512;
