@@ -10,7 +10,7 @@
 
 static IntegrationScheme * scheme = new Euler();
 
-void simulation_step( std::vector<Particle*> pVector,  std::vector<IForce*> forces, std::vector<IConstraint*> constraints, float dt )
+void simulation_step(std::vector<Particle*> pVector, std::vector<IForce*> forces, std::vector<IForce*> gravforces, std::vector<IConstraint*> constraints, float dt)
 {
 	scheme ->  DerivEval(pVector,  forces, constraints, dt);
 }

@@ -12,6 +12,7 @@
 #include "HorizontalWireConstraint.h"
 #include "DragForce.h"
 
+
 #include <iostream>
 #include <fstream>
 
@@ -22,11 +23,12 @@ using namespace std;
 #include <stdlib.h>
 #include <stdio.h>
 #include <glut.h>
+#include <string>
 
 /* macros */
 
 /* external definitions (from solver) */
-extern void simulation_step( std::vector<Particle*> pVector, std::vector<IForce*> forces, std::vector<IConstraint*> constraints, float dt );
+extern void simulation_step(std::vector<Particle*> pVector, std::vector<IForce*> forces, std::vector<IForce*> gravityForces, std::vector<IConstraint*> constraints, float dt);
 
 /* global variables */
 static int N;
@@ -52,6 +54,8 @@ int particleSelected = -1;
 
 static MouseForce *mouseForce;
 static std::vector<IForce*> forces;
+static std::vector<IForce*> gravityForces;
+static std::vector<IForce*> nogravityForces;
 static std::vector<IConstraint*> constraints;
 
 // Prototypes
@@ -106,10 +110,21 @@ static void init_system(void)
 	// You shoud replace these with a vector generalized forces and one of
 	// constraints...
 
-	createCloth();
+	
 
 	mouseForce = new MouseForce();
 	forces.push_back(mouseForce);
+
+
+	/*
+	##gravity
+	*/
+
+	
+
+	for (int p = 0; p < pVector.size(); p++) {
+		forces.push_back(new Gravity(pVector[p]));
+	}
 
 	// Apply gravity on all particle
 	///*forces.push_back( new Gravity(pVector[0]));
@@ -356,7 +371,7 @@ static void get_mouse_pos(void)
 
 static void idle_func ( void )
 {
-	if ( dsim ) simulation_step( pVector, forces, constraints, dt );
+	if (dsim) simulation_step(pVector, forces, (grav ? gravityForces : nogravityForces), constraints, dt);
 	else        {get_from_UI();remap_GUI();}
 
 	get_mouse_pos();
@@ -423,9 +438,9 @@ void createCloth() {
 	double ks = 1;
 	double kd = 1;
 
-	int width = 4;
-	int height = 4;
-	double dist = 0.2;
+	int width = 6;
+	int height = 6;
+	double dist = 0.15;
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
@@ -494,14 +509,70 @@ int main ( int argc, char ** argv )
 	printf ( "\t Toggle construction/simulation display with the spacebar key\n" );
 	printf ( "\t Dump frames by pressing the 'd' key\n" );
 	printf ( "\t Quit by pressing the 'q' key\n" );
-	printf("\n");
-	printf("\t Press 1 for cloth\n");
+
 
 	dsim = 0;
 	dump_frames = 0;
 	frame_number = 0;
 
-	init_system();
+	//options to specify what you would like to run
+
+	bool valid = false;
+	grav = false;
+
+	while (!valid) {
+
+		valid = true; // set valid to true so it breaks out of the loop if nothing changes
+
+		printf("\n");
+		printf("\t Which example would you like to see? cloth, angle\n");
+
+		string string = "";
+		getline(cin, string); //gets line from console and puts it in variable string
+
+		int option;
+
+		if (string == "cloth") {
+			option = 1;
+		}
+		else if (string == "angle") {
+			option = 2;
+		}
+		else {
+			option = 0;
+		}
+
+
+		switch (option)
+		{
+		default:
+			break;
+		case 0:
+			// no valid option
+			cout << "Sorry but " << string << " is not a valid option.";
+	
+			valid = false; // makes sure the loops runs again
+			break;
+		case 1:
+			//option cloth
+			printf("Generating the cloth example, please wait.");
+			createCloth();
+			break;
+
+		case 2:
+			//option angle
+			printf("Generating the angle example, please wait.");
+			break;
+
+		}
+
+
+
+
+	}
+
+
+	init_system();  //general function to create stuff
 
 	win_x = 512;
 	win_y = 512;
