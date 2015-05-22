@@ -30,9 +30,6 @@
     <ClCompile Include="Particle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="imageio.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="linearSolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -80,9 +77,6 @@
     <ClInclude Include="Particle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="imageio.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IForce.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -125,7 +119,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="glut32.dll" />
-    <None Include="libpng16.dll" />
-    <None Include="zlib1.dll" />
   </ItemGroup>
 </Project>

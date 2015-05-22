@@ -5,7 +5,6 @@
 #include "SpringForce.h"
 #include "Gravity.h"
 #include "RodConstraint.h"
-#include "imageio.h"
 #include "IForce.h"
 #include "IConstraint.h"
 #include "MouseForce.h"
