@@ -110,7 +110,7 @@ static void init_system(void)
 	// You shoud replace these with a vector generalized forces and one of
 	// constraints...
 
-	
+
 
 	mouseForce = new MouseForce();
 	forces.push_back(mouseForce);
@@ -120,17 +120,12 @@ static void init_system(void)
 	##gravity
 	*/
 
-	
+
 
 	for (int p = 0; p < pVector.size(); p++) {
 		forces.push_back(new Gravity(pVector[p]));
 	}
-
-	// Apply gravity on all particle
-	///*forces.push_back( new Gravity(pVector[0]));
-	//forces.push_back( new Gravity(pVector[1]));
-	//forces.push_back( new Gravity(pVector[2]));
-
+	
 	//forces.push_back( new DragForce(pVector[0], 0.99));
 	//forces.push_back( new DragForce(pVector[1], 0.99));
 	//forces.push_back( new DragForce(pVector[2], 0.99));
@@ -338,7 +333,7 @@ static void get_mouse_pos(void)
 	&& !mouse_shiftclick[0] && !mouse_shiftclick[2]) return;
 
 	update_mouse_position();
-	
+
 	if (!mouse_down[0]) {
 		released = true;
 		mouseForce -> setEnabled(false);
@@ -434,20 +429,50 @@ Particle* getParticle(int width, int height, int x, int y) {
 	return pVector[y * width + x];
 }
 
-void createCloth() {
-	double ks = 1;
-	double kd = 1;
+void createCircular() {
+	const double dist = 0.2;
+	const Vec2f center(0.0, 0.0);
+	const Vec2f offset(dist, 0.0);
 
-	int width = 6;
+	pVector.push_back(new Particle(center + offset));
+	pVector.push_back(new Particle(center + offset + offset + Vec2f(0.1, 0.0)));
+	pVector.push_back(new Particle(Vec2f(0.5, 0)));
+
+	mouseForce = new MouseForce();
+	forces.push_back(mouseForce);
+
+	for (int p = 0; p < pVector.size(); p++) {
+		forces.push_back(new Gravity(pVector[p]));
+	}
+	
+	forces.push_back( new DragForce(pVector[0], 0.99));
+	forces.push_back( new DragForce(pVector[1], 0.99));
+	forces.push_back( new DragForce(pVector[2], 0.99));
+
+	constraints.push_back(new CircularWireConstraint (pVector[0], Vec2f(0,0), 0.5));
+	constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
+	constraints.push_back(new HorizontalWireConstraint (pVector[2], 1));
+
+}
+
+void createCloth() {
+	double ks = 0.8;
+	double kd = 0.8;
+
+	int width = 7;
 	int height = 6;
+
 	double dist = 0.15;
+	Vec2f position = Vec2f(-1 * (width * dist) / 2, 0.75);
+	
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
 
 			// Currently added particle
-			Particle* p = new Particle(Vec2f(x * dist, y * -dist));
+			Particle* p = new Particle(Vec2f(x * dist, y * -dist) + position);
 			pVector.push_back(p);
+
 
 
 			//add line constraint for the top particles
@@ -455,6 +480,10 @@ void createCloth() {
 				constraints.push_back(new HorizontalWireConstraint(p, 0));
 
 			}
+
+			// Add gravity to particle
+			forces.push_back(new Gravity(p));
+
 
 			if (x > 0) { 
 				Particle *p1 = getParticle(width, height, x-1, y);
@@ -488,7 +517,11 @@ void createCloth() {
 		}
 	}
 
-	
+	// Add wire constraing
+	for (int i = 0; i < width; i++) {
+		constraints.push_back(new HorizontalWireConstraint(getParticle(width, height, i, 0), position[1]));
+	}
+
 }
 
 /*
@@ -534,7 +567,7 @@ int main ( int argc, char ** argv )
 		valid = true; // set valid to true so it breaks out of the loop if nothing changes
 
 		printf("\n");
-		printf("\t Which example would you like to see? cloth, angle\n");
+		printf("\t Which example would you like to see? cloth, angle, circle\n");
 
 		string string = "";
 		getline(cin, string); //gets line from console and puts it in variable string
@@ -546,6 +579,9 @@ int main ( int argc, char ** argv )
 		}
 		else if (string == "angle") {
 			option = 2;
+		}
+		else if (string == "circle") {
+			option = 3;
 		}
 		else {
 			option = 0;
@@ -559,7 +595,7 @@ int main ( int argc, char ** argv )
 		case 0:
 			// no valid option
 			cout << "Sorry but " << string << " is not a valid option.";
-	
+
 			valid = false; // makes sure the loops runs again
 			break;
 		case 1:
@@ -573,6 +609,10 @@ int main ( int argc, char ** argv )
 			printf("Generating the angle example, please wait.");
 			break;
 
+		case 3:
+			printf("Generating the circle constraint example, please wait.");
+			createCircular();
+			break;
 		}
 
 
