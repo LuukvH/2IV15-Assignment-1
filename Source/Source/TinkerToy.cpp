@@ -449,6 +449,13 @@ void createCloth() {
 			Particle* p = new Particle(Vec2f(x * dist, y * -dist));
 			pVector.push_back(p);
 
+
+			//add line constraint for the top particles
+			if (y == 0) {
+				constraints.push_back(new HorizontalWireConstraint(p, 0));
+
+			}
+
 			if (x > 0) { 
 				Particle *p1 = getParticle(width, height, x-1, y);
 				forces.push_back(new SpringForce(p, p1, ks, kd));
@@ -480,6 +487,8 @@ void createCloth() {
 			}
 		}
 	}
+
+	
 }
 
 /*

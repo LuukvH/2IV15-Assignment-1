@@ -27,6 +27,7 @@
     <ClCompile Include="Solver.cpp" />
     <ClCompile Include="SpringForce.cpp" />
     <ClCompile Include="TinkerToy.cpp" />
+    <ClCompile Include="WallForce.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CircularWireConstraint.h" />
@@ -43,14 +44,19 @@
     <ClInclude Include="MidPoint.h" />
     <ClInclude Include="MouseForce.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RodConstraint.h" />
     <ClInclude Include="RungeKutta4thOrder.h" />
     <ClInclude Include="SpringForce.h" />
+    <ClInclude Include="WallForce.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="glut32.dll">
       <DeploymentContent>true</DeploymentContent>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Source.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AC0BF0-5FE1-416E-BB52-C2A31E5089CB}</ProjectGuid>
