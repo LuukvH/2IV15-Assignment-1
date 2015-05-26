@@ -456,19 +456,25 @@ void createCircular() {
 }
 
 void createCloth() {
-	double ks = 1;
-	double kd = 1;
+	double ks = 0.8;
+	double kd = 0.8;
 
-	int width = 6;
+	int width = 7;
 	int height = 6;
+
 	double dist = 0.15;
+	Vec2f position = Vec2f(-1 * (width * dist) / 2, 0.75);
+	
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
 
 			// Currently added particle
-			Particle* p = new Particle(Vec2f(x * dist, y * -dist));
+			Particle* p = new Particle(Vec2f(x * dist, y * -dist) + position);
 			pVector.push_back(p);
+
+			// Add gravity to particle
+			forces.push_back(new Gravity(p));
 
 			if (x > 0) { 
 				Particle *p1 = getParticle(width, height, x-1, y);
@@ -500,6 +506,11 @@ void createCloth() {
 				forces.push_back(new SpringForce(p, p4, ks, kd));
 			}
 		}
+	}
+
+	// Add wire constraing
+	for (int i = 0; i < width; i++) {
+		constraints.push_back(new HorizontalWireConstraint(getParticle(width, height, i, 0), position[1]));
 	}
 }
 
