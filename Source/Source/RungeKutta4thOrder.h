@@ -7,6 +7,8 @@ class RungeKutta4thOrder :
 public:
 	RungeKutta4thOrder(void);
 
+	virtual string getName(void);
+
 	virtual void DerivEval(std::vector<Particle*> pVector,  std::vector<IForce*> forces, std::vector<IConstraint*> constraints, float dt);
 
 	~RungeKutta4thOrder(void);

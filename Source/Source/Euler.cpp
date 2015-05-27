@@ -4,6 +4,11 @@ Euler::Euler(void)
 {
 }
 
+string Euler::getName(void)
+{
+	return "Euler";
+}
+
 void Euler::DerivEval(std::vector<Particle*> pVector, std::vector<IForce*> forces, std::vector<IConstraint*> constraints, float dt )
 {
 	// clear forces

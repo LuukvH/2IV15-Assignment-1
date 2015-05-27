@@ -12,7 +12,7 @@
 #include "HorizontalWireConstraint.h"
 #include "PointConstraint.h"
 #include "DragForce.h"
-
+#include "IntegrationScheme.h"
 
 #include <iostream>
 #include <fstream>
@@ -30,6 +30,8 @@ using namespace std;
 
 /* external definitions (from solver) */
 extern void simulation_step(std::vector<Particle*> pVector, std::vector<IForce*> forces, std::vector<IForce*> gravityForces, std::vector<IConstraint*> constraints, float dt);
+extern void changeIntegrationScheme(void);
+extern string getIntegrationScheme(void);
 
 /* global variables */
 static int N;
@@ -248,8 +250,9 @@ static void key_func ( unsigned char key, int x, int y )
 {
 	switch ( key )
 	{
-	//case '':
-		//break;
+	case 'i':
+		
+		break;
 	case 'c':
 	case 'C':
 		clear_data ();
@@ -272,6 +275,11 @@ static void key_func ( unsigned char key, int x, int y )
 		break;
 	case ' ':
 		dsim = !dsim;
+		break;
+	case 's':
+	case 'S':
+		changeIntegrationScheme();
+		updateWindowsMessage();
 		break;
 	case '<':
 		dt -= 0.01;
@@ -401,7 +409,8 @@ open_glut_window --- open a glut compatible window and set callbacks
 static void updateWindowsMessage(void)
 {
 	char buff[100];
-	sprintf_s(buff, "%s: %lf", "DeltaT", dt);
+	string schemeName = getIntegrationScheme();
+	sprintf_s(buff, "DeltaT: %lf, Scheme: %s", dt, schemeName.c_str());	
 
 	glutSetWindowTitle(buff);
 }

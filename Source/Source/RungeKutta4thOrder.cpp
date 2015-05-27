@@ -6,6 +6,11 @@ RungeKutta4thOrder::RungeKutta4thOrder(void)
 	positions = std::vector<Vec2f>();
 }
 
+string RungeKutta4thOrder::getName(void)
+{
+	return "4th order Runge Kutta";
+}
+
 void RungeKutta4thOrder::DerivEval(std::vector<Particle*> pVector, std::vector<IForce*> forces, std::vector<IConstraint*> constraints, float dt )
 {
 	// Clear positions vector

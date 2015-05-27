@@ -5,6 +5,11 @@ MidPoint::MidPoint(void)
 	positions = std::vector<Vec2f>();
 }
 
+string MidPoint::getName(void)
+{
+	return "Midpoint";
+}
+
 void MidPoint::DerivEval(std::vector<Particle*> pVector, std::vector<IForce*> forces, std::vector<IConstraint*> constraints, float dt )
 {
 	// Clear positions vector
