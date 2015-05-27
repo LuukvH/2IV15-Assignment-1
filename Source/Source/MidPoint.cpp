@@ -23,7 +23,7 @@ void MidPoint::DerivEval(std::vector<Particle*> pVector, std::vector<IForce*> fo
 		forces[i] -> apply();
 	}
 
-	ConstraintSolver::Calculate(pVector, constraints, 60, 5);
+	ConstraintSolver::Calculate(pVector, constraints, 100, 2);
 
 	// increase velocity for each particle
 	for (unsigned int i = 0; i < pVector.size(); i++) {
@@ -46,7 +46,7 @@ void MidPoint::DerivEval(std::vector<Particle*> pVector, std::vector<IForce*> fo
 		forces[i] -> apply();
 	}
 
-	ConstraintSolver::Calculate(pVector, constraints, 60, 5);
+	ConstraintSolver::Calculate(pVector, constraints, 100, 2);
 
 	// Displace particle from startposition
 	for (unsigned int i = 0; i < pVector.size(); i++) {

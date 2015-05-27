@@ -10,6 +10,7 @@
 #include "MouseForce.h"
 #include "CircularWireConstraint.h"
 #include "HorizontalWireConstraint.h"
+#include "PointConstraint.h"
 #include "DragForce.h"
 
 
@@ -60,6 +61,7 @@ static std::vector<IConstraint*> constraints;
 
 // Prototypes
 void createCloth();
+void updateWindowsMessage(void);
 
 /*
 ----------------------------------------------------------------------
@@ -125,7 +127,7 @@ static void init_system(void)
 	for (int p = 0; p < pVector.size(); p++) {
 		forces.push_back(new Gravity(pVector[p]));
 	}
-	
+
 	//forces.push_back( new DragForce(pVector[0], 0.99));
 	//forces.push_back( new DragForce(pVector[1], 0.99));
 	//forces.push_back( new DragForce(pVector[2], 0.99));
@@ -246,6 +248,8 @@ static void key_func ( unsigned char key, int x, int y )
 {
 	switch ( key )
 	{
+	//case '':
+		//break;
 	case 'c':
 	case 'C':
 		clear_data ();
@@ -266,14 +270,16 @@ static void key_func ( unsigned char key, int x, int y )
 		free_data ();
 		exit ( 0 );
 		break;
-
 	case ' ':
 		dsim = !dsim;
-		//put vectors on 0 to restart the simulation
-		//for_each(pVector.begin(), pVector.end(), [](Particle* v) {
-		//	v->m_Velocity = 0;
-
-		//});
+		break;
+	case '<':
+		dt -= 0.01;
+		updateWindowsMessage();
+		break;
+	case '>':
+		dt += 0.01;
+		updateWindowsMessage();
 		break;
 	}
 }
@@ -392,6 +398,14 @@ open_glut_window --- open a glut compatible window and set callbacks
 ----------------------------------------------------------------------
 */
 
+static void updateWindowsMessage(void)
+{
+	char buff[100];
+	sprintf_s(buff, "%s: %lf", "DeltaT", dt);
+
+	glutSetWindowTitle(buff);
+}
+
 static void open_glut_window ( void )
 {
 	glutInitDisplayMode ( GLUT_RGBA | GLUT_DOUBLE );
@@ -399,6 +413,7 @@ static void open_glut_window ( void )
 	glutInitWindowPosition ( 0, 0 );
 	glutInitWindowSize ( win_x, win_y );
 	win_id = glutCreateWindow ( "Tinkertoys!" );
+	updateWindowsMessage();
 
 	glClearColor ( 0.0f, 0.0f, 0.0f, 1.0f );
 	glClear ( GL_COLOR_BUFFER_BIT );
@@ -437,6 +452,7 @@ void createCircular() {
 	pVector.push_back(new Particle(center + offset));
 	pVector.push_back(new Particle(center + offset + offset + Vec2f(0.1, 0.0)));
 	pVector.push_back(new Particle(Vec2f(0.5, 0)));
+	pVector.push_back(new Particle(Vec2f(0.7, 0.7)));
 
 	mouseForce = new MouseForce();
 	forces.push_back(mouseForce);
@@ -444,11 +460,12 @@ void createCircular() {
 	for (int p = 0; p < pVector.size(); p++) {
 		forces.push_back(new Gravity(pVector[p]));
 	}
-	
+
 	forces.push_back( new DragForce(pVector[0], 0.99));
 	forces.push_back( new DragForce(pVector[1], 0.99));
 	forces.push_back( new DragForce(pVector[2], 0.99));
 
+	constraints.push_back(new PointConstraint(pVector[3], Vec2f(0.7, 0.7)));
 	constraints.push_back(new CircularWireConstraint (pVector[0], Vec2f(0,0), 0.5));
 	constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
 	constraints.push_back(new HorizontalWireConstraint (pVector[2], 1));
@@ -464,7 +481,7 @@ void createCloth() {
 
 	double dist = 0.15;
 	Vec2f position = Vec2f(-1 * (width * dist) / 2, 0.75);
-	
+
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
@@ -473,17 +490,8 @@ void createCloth() {
 			Particle* p = new Particle(Vec2f(x * dist, y * -dist) + position);
 			pVector.push_back(p);
 
-
-
-			//add line constraint for the top particles
-			if (y == 0) {
-				constraints.push_back(new HorizontalWireConstraint(p, 0));
-
-			}
-
 			// Add gravity to particle
 			forces.push_back(new Gravity(p));
-
 
 			if (x > 0) { 
 				Particle *p1 = getParticle(width, height, x-1, y);
@@ -517,7 +525,7 @@ void createCloth() {
 		}
 	}
 
-	// Add wire constraing
+	// Add wire constraint
 	for (int i = 0; i < width; i++) {
 		constraints.push_back(new HorizontalWireConstraint(getParticle(width, height, i, 0), position[1]));
 	}

@@ -11,7 +11,7 @@ void WallForce::apply()
 {
 	//check if the particle goes beyond the border
 	//if ()
-	m_p1->m_Force -= f; //this moves point 1
+	//m_p1->m_Force -= f; //this moves point 1
 }
 
 void WallForce::draw()

@@ -13,7 +13,7 @@ float RodConstraint::getC() {
 }
 
 float RodConstraint::getCdot() {
-	return (Vec2f(2, 2) * (m_p1->m_Position - m_p2->m_Position)) * (Vec2f(2, 2)  * (m_p1->m_Velocity - m_p2->m_Velocity));
+	return (2 * (m_p1->m_Position - m_p2->m_Position)) * (2 * (m_p1->m_Velocity - m_p2->m_Velocity));
 }
 
 std::vector<Vec2f> RodConstraint::getJ() {

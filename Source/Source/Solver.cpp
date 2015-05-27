@@ -5,10 +5,11 @@
 #include "IntegrationScheme.h"
 #include "Euler.h"
 #include "MidPoint.h"
+#include "RungeKutta4thOrder.h"
 
 #include <vector>
 
-static IntegrationScheme * scheme = new Euler();
+static IntegrationScheme * scheme = new RungeKutta4thOrder();
 
 void simulation_step(std::vector<Particle*> pVector, std::vector<IForce*> forces, std::vector<IForce*> gravforces, std::vector<IConstraint*> constraints, float dt)
 {
