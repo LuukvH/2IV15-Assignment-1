@@ -31,16 +31,12 @@ std::vector<Vec2f> PointConstraint::getJdot() {
 
 void PointConstraint::draw()
 {
-	glBegin( GL_TRIANGLES );
-	glColor3f(0.8, 0.7, 0.6);
-	glVertex2f(0, 0);
-	glVertex2f(1, 0);
-	glVertex2f(1, 1);
-	glEnd();
-
-
 	/*
-	glBegin( GL_POINT );
+	glEnable( GL_POINT_SMOOTH );
+	glEnable( GL_BLEND );
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+	glPointSize( 6.0 );
+	glBegin( GL_POINTS );
 	glColor3f(0.8, 0.7, 0.6);
 	glVertex2f( m_position[0], m_position[1] );
 	glEnd();
