@@ -13,6 +13,7 @@
 #include "PointConstraint.h"
 #include "DragForce.h"
 #include "IntegrationScheme.h"
+#include "AngularSpringForce.h"
 
 #include <iostream>
 #include <fstream>
@@ -461,7 +462,16 @@ void createCircular() {
 	pVector.push_back(new Particle(center + offset));
 	pVector.push_back(new Particle(center + offset + offset + Vec2f(0.1, 0.0)));
 	pVector.push_back(new Particle(Vec2f(0.5, 0)));
-	pVector.push_back(new Particle(Vec2f(0.7, 0.7)));
+	pVector.push_back(new Particle(Vec2f(0, 0)));
+
+	/*
+	pVector.push_back(new Particle(Vec2f(0, 0)));
+	pVector.push_back(new Particle(Vec2f(0.25, -0.25)));
+	pVector.push_back(new Particle(Vec2f(0, -0.5)));
+
+	constraints.push_back(new PointConstraint(pVector[4], Vec2f(0, 0)));
+	forces.push_back(new AngularSpringForce(pVector[4], pVector[5], pVector[6], 90, 1.5, 1));
+	*/
 
 	mouseForce = new MouseForce();
 	forces.push_back(mouseForce);
@@ -474,10 +484,10 @@ void createCircular() {
 	forces.push_back( new DragForce(pVector[1], 0.99));
 	forces.push_back( new DragForce(pVector[2], 0.99));
 
-	constraints.push_back(new PointConstraint(pVector[3], Vec2f(0.7, 0.7)));
+	constraints.push_back(new PointConstraint(pVector[3], Vec2f(0, 0)));
 	constraints.push_back(new CircularWireConstraint (pVector[0], Vec2f(0,0), 0.5));
 	constraints.push_back(new RodConstraint(pVector[0], pVector[1], dist));
-	constraints.push_back(new HorizontalWireConstraint (pVector[2], 1));
+	constraints.push_back(new HorizontalWireConstraint (pVector[2], 0.7));
 
 }
 
