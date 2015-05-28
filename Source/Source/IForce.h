@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Particle.h"
+
 #include <glut.h>
 #include <vector>
 
