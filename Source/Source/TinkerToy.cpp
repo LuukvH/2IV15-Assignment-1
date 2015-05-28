@@ -14,6 +14,7 @@
 #include "DragForce.h"
 #include "IntegrationScheme.h"
 #include "AngularSpringForce.h"
+#include "WallForce.h"
 
 #include <iostream>
 #include <fstream>
@@ -41,6 +42,7 @@ static int dsim;
 static int grav;
 static int dump_frames;
 static int frame_number;
+static double vertical_wall_pos;
 
 // static Particle *pList;
 static std::vector<Particle*> pVector;
@@ -129,6 +131,7 @@ static void init_system(void)
 
 	for (int p = 0; p < pVector.size(); p++) {
 		forces.push_back(new Gravity(pVector[p]));
+		forces.push_back(new WallForce(pVector[p], vertical_wall_pos));
 	}
 
 	//forces.push_back( new DragForce(pVector[0], 0.99));
@@ -182,6 +185,8 @@ static void draw_forces(void)
 	{
 		f->draw();
 	});
+
+
 }
 
 static void draw_constraints ( void )
@@ -589,14 +594,19 @@ int main ( int argc, char ** argv )
 	bool valid = false;
 	grav = false;
 
+
+
+
+	
+
 	while (!valid) {
 
 		valid = true; // set valid to true so it breaks out of the loop if nothing changes
 
 		printf("\n");
 		printf("\t Which example would you like to see? cloth, angle, circle\n");
-
 		string string = "";
+		
 		getline(cin, string); //gets line from console and puts it in variable string
 
 		int option;
@@ -626,6 +636,7 @@ int main ( int argc, char ** argv )
 			valid = false; // makes sure the loops runs again
 			break;
 		case 1:
+
 			//option cloth
 			printf("Generating the cloth example, please wait.");
 			createCloth();
@@ -647,6 +658,29 @@ int main ( int argc, char ** argv )
 
 	}
 
+
+
+		
+	printf("\n");
+	printf("\t Would you like to add a vertical wall? y or n\n");
+	string yesno = "";
+	getline(cin, yesno); //gets line from console and puts it in variable string
+
+	if (yesno == "y") {
+		printf("\n");
+		printf("\t Please specify te x as of the left wall (integer between -1 and 1)\n");
+		int input;
+		cin >> input;
+		vertical_wall_pos = input;
+	}
+	else {
+		vertical_wall_pos = -2;
+		printf("\n");
+		printf("\t We didn't add a wall\n");
+	}
+
+
+	
 
 	init_system();  //general function to create stuff
 

@@ -6,7 +6,7 @@
 class WallForce : public IForce
 {
 public:
-	WallForce::WallForce(Particle *p1);
+	WallForce::WallForce(Particle *p1, double x);
 
 	virtual void apply();
 
@@ -15,4 +15,5 @@ public:
 private:
 
 	Particle * const m_p1;   // particle 1
+	double m_x;
 };
