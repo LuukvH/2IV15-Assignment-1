@@ -583,7 +583,7 @@ int main ( int argc, char ** argv )
 	printf ( "\t Toggle construction/simulation display with the spacebar key\n" );
 	printf ( "\t Dump frames by pressing the 'd' key\n" );
 	printf ( "\t Quit by pressing the 'q' key\n" );
-
+	printf ("\t To switch constraint methods use the 's' key, it will loop through Euler, Midpoint and RungeKutta, the method used is displayed on top of the application\n");
 
 	dsim = 0;
 	dump_frames = 0;
