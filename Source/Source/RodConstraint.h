@@ -7,7 +7,9 @@ class RodConstraint: public IConstraint
 {
 
 public:
+	RodConstraint(Particle *p1, Particle * p2);
 	RodConstraint(Particle *p1, Particle * p2, double dist);
+	
 
 	virtual float getC();
 	virtual float getCdot();

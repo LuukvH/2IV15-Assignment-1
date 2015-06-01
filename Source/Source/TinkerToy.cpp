@@ -157,7 +157,7 @@ static void pre_display ( void )
 	glMatrixMode ( GL_PROJECTION );
 	glLoadIdentity ();
 	gluOrtho2D ( -1.0, 1.0, -1.0, 1.0 );
-	glClearColor ( 0.0f, 0.0f, 0.0f, 1.0f );
+	glClearColor ( 1.0f, 1.0f, 1.0f, 1.0f );
 	glClear ( GL_COLOR_BUFFER_BIT );
 }
 
@@ -176,6 +176,16 @@ static void draw_particles ( void )
 	for(int ii=0; ii< size; ii++)
 	{
 		pVector[ii]->draw();
+	}
+
+	for(int ii=0; ii< size; ii++)
+	{
+		pVector[ii]->drawForce();
+	}
+
+	for(int ii=0; ii< size; ii++)
+	{
+		pVector[ii]->drawSpeed();
 	}
 }
 
@@ -257,7 +267,7 @@ static void key_func ( unsigned char key, int x, int y )
 	switch ( key )
 	{
 	case 'i':
-		
+
 		break;
 	case 'c':
 	case 'C':
@@ -288,11 +298,11 @@ static void key_func ( unsigned char key, int x, int y )
 		updateWindowsMessage();
 		break;
 	case '<':
-		dt -= 0.01;
+		dt -= 0.001;
 		updateWindowsMessage();
 		break;
 	case '>':
-		dt += 0.01;
+		dt += 0.001;
 		updateWindowsMessage();
 		break;
 	}
@@ -506,7 +516,6 @@ void createCloth() {
 	double dist = 0.15;
 	Vec2f position = Vec2f(-1 * (width * dist) / 2, 0.75);
 
-
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
 
@@ -652,10 +661,6 @@ int main ( int argc, char ** argv )
 			createCircular();
 			break;
 		}
-
-
-
-
 	}
 
 

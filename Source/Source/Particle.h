@@ -10,6 +10,9 @@ public:
 	virtual ~Particle(void);
 
 	void reset();
+
+	void drawSpeed(void);
+	void drawForce(void);
 	void draw();
 
 	int id;
