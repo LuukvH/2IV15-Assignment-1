@@ -674,7 +674,7 @@ int main ( int argc, char ** argv )
 	if (yesno == "y") {
 		printf("\n");
 		printf("\t Please specify te x as of the left wall (integer between -1 and 1)\n");
-		int input;
+		double input;
 		cin >> input;
 		vertical_wall_pos = input;
 	}
